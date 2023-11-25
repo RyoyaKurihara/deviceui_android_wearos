@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,12 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: kIsWeb || !isWearDevice(context)
-          ? AppBar(
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-      )
-          : null, // Wear OSデバイスの場合はAppBarを非表示にする
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -57,23 +57,24 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
+            Text(
+              Platform.operatingSystem,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(
+              Theme.of(context).platform == TargetPlatform.android? 'isAndroid':'!isAndroid',
+              style: Theme.of(context).textTheme.headlineMedium,
+            )
           ],
         ),
       ),
-      floatingActionButton: kIsWeb || !isWearDevice(context)
-          ? FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      )
-          : null, // Wear OSデバイスの場合はFloatingActionButtonを非表示にする
+      ),
     );
-  }
-
-  bool isWearDevice(BuildContext context) {
-    // デバイスがWear OSかどうかを判定
-    return MediaQuery.of(context).platformBrightness == Brightness.dark;
   }
 }
